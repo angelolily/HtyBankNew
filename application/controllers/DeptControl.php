@@ -27,7 +27,7 @@ class DeptControl extends CI_Controller
 		if ($receiveArr) {
 			$OldDataArr = json_decode($receiveArr, true);
 			if (count($OldDataArr) > 0) {
-				if (array_key_exists("jwt", $OldDataArr)) {
+				if (array_key_exists("ud", $OldDataArr)) {
 					$userInfo = $this->htyjwt->verification($OldDataArr['jwt']);
 					$this->userArr = $this->$userInfo['data']['data'];
 					$this->dataArr = bykey_reitem($OldDataArr, 'jwt');
