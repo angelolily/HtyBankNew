@@ -23,6 +23,7 @@ class Sys_Model extends CI_Model
 		}
 
 
+
 		$result = $this->db->affected_rows();
 		$this->db->cache_delete_all();
 		return $result;

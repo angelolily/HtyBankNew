@@ -62,10 +62,49 @@ class DeptControl extends CI_Controller
 
 		$resultNum = $this->Dept->addData($this->dataArr, $this->userArr['Mobile']);
 		if ($resultNum > 0) {
-			$resulArr = build_resulArr('D001', true, '插入成功', []);
+			$resulArr = build_resulArr('D000', true, '插入成功', []);
 			http_data(200, $resulArr, $this);
 		} else {
 			$resulArr = build_resulArr('D002', false, '插入失败', []);
+			http_data(505, $resulArr, $this);
+		}
+
+
+	}
+
+
+	/**
+	 * Notes:获取部门信息
+	 * User: angelo
+	 * DateTime: 2020/12/25 10:01
+	 */
+	public function getRow()
+	{
+
+		$this->hedVerify();
+
+		$result = $this->Dept->getDept($this->dataArr);
+		if (count($result) > 0) {
+			$resulArr = build_resulArr('D000', true, '获取成功', json_encode($result));
+			http_data(200, $resulArr, $this);
+		} else {
+			$resulArr = build_resulArr('D003', false, '获取失败', []);
+			http_data(505, $resulArr, $this);
+		}
+
+
+	}
+
+
+	public function delRow()
+	{
+		$this->hedVerify();
+		$result = $this->Dept->delDept($this->dataArr);
+		if (count($result) > 0) {
+			$resulArr = build_resulArr('D000', true, '删除成功', );
+			http_data(200, $resulArr, $this);
+		} else {
+			$resulArr = build_resulArr('D003', false, '获取失败', []);
 			http_data(505, $resulArr, $this);
 		}
 

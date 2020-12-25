@@ -23,10 +23,13 @@ class Author
 		$key=self::$CI->config->item('encryption_key');
 		$signStr="";
 		$signArr=[];
+		reset($parameter);
 		if(count($parameter)>0)
 		{
-			foreach ($parameter as $key=>$value){
-				$signStr=$signStr.$key.$value;
+			while (list($k, $v) = each($parameter))
+			{
+				$tmp = "$k" . "$v";
+				$signStr .= $tmp;
 			}
 
 			$signStr = sha1($signStr);//全部拼接key后，得到sha1
@@ -40,9 +43,11 @@ class Author
 
 	}
 
+
+
 	public static function verifica()
 	{
-		$ss=$_SERVER['REQUEST_METHOD'];
+    	$ss=$_SERVER['REQUEST_METHOD'];
 		if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
 			http_data(200,[],self::$CI);
 		}

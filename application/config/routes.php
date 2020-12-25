@@ -54,6 +54,8 @@ $route['test']['put'] = 'test/ss';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['ul'] = 'Login/userlogin';//登陆自定义路由
-$route['dp/new'] = 'DeptControl/index';//新增部门
+$route['dp/new'] = 'DeptControl/newRow';//新增部门
+$route['dp/get'] = 'DeptControl/getRow';//获取部门信息
+$route['dp/delete'] = 'DeptControl/delDept';//删除部门信息
 
 
