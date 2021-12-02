@@ -1,13 +1,13 @@
 <?php
 
 
-class Sys_Model extends CI_Model
+class Jko_Model extends CI_Model
 {
 
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->database('default');
+		$this->db =$this->load->database('jkos',true);
 	}
 
 	//插入记录
@@ -31,7 +31,7 @@ class Sys_Model extends CI_Model
 	}
 
 
-	public function table_seleRow_limit($field,$taname,$wheredata=array(),$likedata=array(),$limit=1,$offset=1,$order=null,$order_type=null,$orWhere=array(),$orWherein=array(),$whereinfield=""){
+	public function table_seleRow_limit($field,$taname,$wheredata=array(),$likedata=array(),$limit=1,$offset=1,$order=null,$order_type=null){
 
 
 		$this->db->select($field);
@@ -40,13 +40,6 @@ class Sys_Model extends CI_Model
 		}
 		if(count($likedata)>0){
 			$this->db->like($likedata);//判断需不需要like查询
-		}
-		if(count($orWhere)>0){
-			$this->db->or_where($orWhere);//判断需不需要ow where
-		}
-
-		if(count($orWherein)>0){
-			$this->db->where_in($whereinfield,$orWherein);//判断需不需要ow where in
 		}
 		$this->db->limit($offset,$limit);
 		if(!(is_null($order))){
@@ -65,33 +58,6 @@ class Sys_Model extends CI_Model
 
 	}
 
-	public function get_userdata($pages,$rows,$wheredata,$likedata){
-		//Select SQL_CALC_FOUND_ROWS UserId,UserName,base_dept.DeptName,Mobile,Birthday,UserStatus,UserEmail,Sex,Remark,IsAdmin,UserRol,UserPost,base_user.CREATED_TIME from base_user,base_dept where base_user.DeptId = base_dept.DeptId
-
-
-		$offset=($pages-1)*$rows;//计算偏移量
-		$field='*';
-		$sql_query="Select ".$field." from base_user ";
-		if($wheredata!=""){
-			$sql_query=$sql_query." where ".$wheredata;
-		}
-		if($likedata!=""){
-			$sql_query=$sql_query.$likedata;
-		}
-
-		$sql_query_total=$sql_query;
-		$sql_query=$sql_query." limit ".$offset.",".$rows;
-		$query = $this->db->query($sql_query);
-		$ss=$this->db->last_query();
-		$r_total=$this->db->query($sql_query_total)->result_array();
-		$row_arr=$query->result_array();
-		$result['total']=count($r_total);//获取总行数
-		$result["data"] = $row_arr;
-		return $result;
-	}
-
-
-
 
 	//查询记录
 	public function table_seleRow($field,$taname,$wheredata=array(),$likedata=array(),$wherein=array(),$whereinfield="",$orderby="",$order_type=""){
@@ -107,7 +73,7 @@ class Sys_Model extends CI_Model
 		if(count($wherein)>0){
 			$this->db->where_in($whereinfield,$wherein);//判断需不需要ow where in
 		}
-		if($orderby=="")
+		if($orderby!="")
 		{
 			$this->db->order_by($orderby,$order_type);
 		}
@@ -181,6 +147,22 @@ class Sys_Model extends CI_Model
 
 
 	}
+
+	//查询银行信息
+	public function searcheBank($where)
+	{
+		$data = array();
+		$this->db->select('c_bankid,c_bankname');
+		$this->db->where($where);
+		$query = $this->db->get('jko_bank');
+		$ss = $this->db->last_query();
+		foreach ($query->result_array() as $row) {
+			array_push($data, $row);
+		}
+
+		return $data;
+	}
+
 
 	//执行纯SQL语句，返回数组
 	public function execute_sql($sql)
