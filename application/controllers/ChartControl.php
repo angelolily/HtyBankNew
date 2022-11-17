@@ -15,9 +15,6 @@ class ChartControl extends CI_Controller
 	}
 
 
-
-
-
 	public function getPiechat()
 	{
 		$result = $this->charts->pieChat();
